@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [submit, setSubmit] = useState(false);
 
   // const handleLogin = () => {
   //   if (email !== "" && password !== "") {
@@ -19,6 +28,15 @@ export const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.bgImage}>
+        <Image
+          style={{
+            width: "100%",
+            height: "140%",
+            resizeMode: "stretch",
+            position: "absolute",
+          }}
+          source={require("../assets/bg.png")}
+        />
         <Text
           style={{
             textAlign: "center",
@@ -38,7 +56,10 @@ export const Login = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="email"
-            onChangeText={(e) => setEmail(e.toLocaleLowerCase())}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            onChangeText={(e) => setEmail(e)}
             value={email}
           />
           <View style={styles.divider}></View>
@@ -47,18 +68,49 @@ export const Login = ({ navigation }) => {
             style={styles.input}
             placeholder="password"
             secureTextEntry
+            autoCorrect={false}
+            textContentType="password"
             onChangeText={(e) => setPassword(e)}
             value={password}
           />
           <View style={styles.divider}></View>
-          <TouchableOpacity
-            style={styles.button}
+          <Pressable
+            style={({ pressed }) => [
+              {
+                marginHorizontal: 12,
+                backgroundColor: pressed ? "#6969CA" : "#393AAA",
+                padding: 15,
+                alignItems: "center",
+              },
+            ]}
             onPress={() => console.log({ email, password })}
           >
             <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+          </Pressable>
           <View
-            style={{ flex: 1, alignItems: "center", marginTop: 50, right: 5 }}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              marginVertical: 15,
+              marginHorizontal: 12,
+              justifyContent: "center",
+            }}
+          >
+            <Text>Don't have an account?</Text>
+            <TouchableOpacity style={{ marginLeft: 5 }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "#393AAA",
+                  fontWeight: 600,
+                }}
+              >
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{ flex: 1, alignItems: "center", marginTop: 10, right: 5 }}
           >
             <Image
               style={{ width: 200, height: 200, resizeMode: "stretch" }}
@@ -101,12 +153,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#808496",
   },
-  button: {
-    marginHorizontal: 12,
-    backgroundColor: "#393AAA",
-    padding: 15,
-    alignItems: "center",
-  },
+  button: {},
   buttonText: {
     color: "white",
   },
