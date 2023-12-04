@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
 import {
@@ -17,13 +18,13 @@ export const Login = ({ navigation }) => {
   const [password, setPassword] = useState();
   const [submit, setSubmit] = useState(false);
 
-  // const handleLogin = () => {
-  //   if (email !== "" && password !== "") {
-  //     signInWithEmailAndPassword(auth, email, password)
-  //       .then(() => console.log("LOGIN SUCCESS"))
-  //       .catch(() => Alert.alert("Login error", err.message));
-  //   }
-  // };
+  const handleLogin = () => {
+    if (email !== "" && password !== "") {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => console.log("LOGIN SUCCESS"))
+        .catch(() => Alert.alert("Login error", err.message));
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -40,7 +41,7 @@ export const Login = ({ navigation }) => {
         <Text
           style={{
             textAlign: "center",
-            marginVertical: 60,
+            marginVertical: 80,
             paddingBottom: 20,
             color: "#F2F2F2",
             fontWeight: 600,
@@ -83,7 +84,7 @@ export const Login = ({ navigation }) => {
                 alignItems: "center",
               },
             ]}
-            onPress={() => console.log({ email, password })}
+            onPress={handleLogin}
           >
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
@@ -97,7 +98,10 @@ export const Login = ({ navigation }) => {
             }}
           >
             <Text>Don't have an account?</Text>
-            <TouchableOpacity style={{ marginLeft: 5 }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("SignUp")}
+              style={{ marginLeft: 5 }}
+            >
               <Text
                 style={{
                   textAlign: "center",
