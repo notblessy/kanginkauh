@@ -1,25 +1,56 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-import { createStackNavigator } from "@react-navigation/stack";
+import * as React from "react";
+import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { ActivityIndicator, Text, View } from "react-native";
-
-import { Chat } from "./screens/Chat";
-import { Login } from "./screens/Login";
-import { SignUp } from "./screens/Signup";
-import { Home } from "./screens/Home";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./config/firebase";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AuthProvider, useAuth } from "./libs/context/auth";
 
+import { Chats } from "./screens/Chats";
+import { Chat } from "./screens/Chat";
+import { Ionicons } from "@expo/vector-icons";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Login } from "./screens/Login";
+import { SignUp } from "./screens/Signup";
+
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-function ChatStack() {
+function BottomTab() {
   return (
-    <Stack.Navigator defaultScreenOptions={Home}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Chat" component={Chat} />
-    </Stack.Navigator>
+    <Tab.Navigator initialRouteName="Chats">
+      <Tab.Screen
+        options={{
+          headerShown: false,
+          tabBarLabel: "Chats",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubbles-sharp" size={size} color={color} />
+          ),
+        }}
+        name="Chats"
+        component={Chats}
+      />
+      <Tab.Screen
+        options={{
+          headerShown: false,
+          tabBarLabel: "Contact",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-circle-sharp" size={size} color={color} />
+          ),
+        }}
+        name="Contact"
+        component={Chat}
+      />
+      <Tab.Screen
+        options={{
+          headerShown: false,
+          tabBarLabel: "Setting",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" color={color} size={size} />
+          ),
+        }}
+        name="Setting"
+        component={Chat}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -48,7 +79,7 @@ function RootNavigator() {
 
   return (
     <NavigationContainer>
-      {user ? <ChatStack /> : <AuthStack />}
+      {user ? <BottomTab /> : <AuthStack />}
     </NavigationContainer>
   );
 }

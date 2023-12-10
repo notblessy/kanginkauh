@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
 import {
@@ -10,8 +9,8 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -22,7 +21,7 @@ export const Login = ({ navigation }) => {
     if (email !== "" && password !== "") {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => console.log("LOGIN SUCCESS"))
-        .catch(() => Alert.alert("Login error", err.message));
+        .catch((err) => Alert.alert("Login error", err.message));
     }
   };
 
